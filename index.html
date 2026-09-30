@@ -80,29 +80,56 @@
       <div class="card">
         <div class="card-title"><span class="dot"></span>今日清单</div>
         <div id="checklist">
+          <div class="cl-group">生活</div>
           <div class="check-item" data-key="sleep">
             <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
             <div class="label">睡够 7 小时<small>22:30–23:00 睡，别熬夜</small></div>
           </div>
-          <div class="check-item" data-key="sun">
-            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
-            <div class="label">涂防晒<small>出门前，阴天也涂</small></div>
-          </div>
-          <div class="check-item" data-key="skincare">
-            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
-            <div class="label">早晚护肤<small>早面霜+防晒 · 晚A醇</small></div>
-          </div>
           <div class="check-item" data-key="steps">
             <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
-            <div class="label">步数达标<small>8000 步以上</small></div>
+            <div class="label">步数 ≥ 8000<small>久坐党减脂的关键增量</small></div>
           </div>
+
+          <div class="cl-group">饮食</div>
           <div class="check-item" data-key="protein">
             <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
             <div class="label">蛋白质达标<small>三餐都有手掌大的蛋白</small></div>
           </div>
+          <div class="check-item" data-key="nosugar">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label">没喝奶茶 / 含糖饮料<small>糖会毁掉减脂和皮肤</small></div>
+          </div>
+          <div class="check-item" data-key="lowsalt">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label">控盐<small>菜过水、汤少喝，防水肿</small></div>
+          </div>
           <div class="check-item" data-key="fast">
             <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
             <div class="label">睡前 3 小时不吃东西<small>控盐控糖，防水肿</small></div>
+          </div>
+
+          <div class="cl-group">训练</div>
+          <div class="check-item" data-key="workout">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label"><span id="cl-workout-label">完成今日训练</span><small id="cl-workout-sub">—</small></div>
+          </div>
+          <div class="check-item" data-key="cardio">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label"><span id="cl-cardio-label">有氧</span><small id="cl-cardio-sub">—</small></div>
+          </div>
+
+          <div class="cl-group">护肤</div>
+          <div class="check-item" data-key="amskin">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label">早上：面霜 + 防晒<small>防晒必涂，阴天也涂</small></div>
+          </div>
+          <div class="check-item" data-key="pmskin">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label">晚上：A 醇<small>建立耐受后再每天用</small></div>
+          </div>
+          <div class="check-item" data-key="mask">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label">面膜<small>一周 2–3 次，可选</small></div>
           </div>
         </div>
       </div>
@@ -110,7 +137,7 @@
       <div class="card water">
         <div class="card-title" style="justify-content:center"><span class="dot"></span>喝水打卡</div>
         <div class="big"><span class="num" id="water-val">0</span><span class="unit">ml</span></div>
-        <div class="cap">目标 2500 ml</div>
+        <div class="cap">目标 <span id="water-target">2500</span> ml</div>
         <div class="btns">
           <button data-add="250">+250</button>
           <button data-add="500">+500</button>
