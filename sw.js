@@ -1,5 +1,5 @@
 // 薄肌计划 · Service Worker（离线缓存）
-const CACHE = 'lean-v2';
+const CACHE = 'lean-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -28,16 +28,16 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+  // 网络优先：在线时始终拿最新文件；断网时才回退到缓存
   e.respondWith(
-    caches.match(e.request).then((hit) =>
-      hit ||
-      fetch(e.request).then((res) => {
-        if (res.ok && e.request.url.startsWith(self.location.origin)) {
-          const clone = res.clone();
-          caches.open(CACHE).then((c) => c.put(e.request, clone));
-        }
-        return res;
-      }).catch(() => caches.match('./index.html'))
+    fetch(e.request).then((res) => {
+      if (res.ok && e.request.url.startsWith(self.location.origin)) {
+        const clone = res.clone();
+        caches.open(CACHE).then((c) => c.put(e.request, clone));
+      }
+      return res;
+    }).catch(() =>
+      caches.match(e.request).then((hit) => hit || caches.match('./index.html'))
     )
   );
 });
