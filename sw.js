@@ -1,10 +1,11 @@
 // 薄肌计划 · Service Worker（离线缓存）
-const CACHE = 'lean-v1';
+const CACHE = 'lean-v2';
 const ASSETS = [
   './',
   './index.html',
   './css/style.css',
   './js/app.js',
+  './js/foods.js',
   './manifest.json',
   './icons/icon-180.png',
   './icons/icon-192.png',
