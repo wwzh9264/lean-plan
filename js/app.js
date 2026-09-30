@@ -79,6 +79,7 @@
     if ($('tgt-kcal')) $('tgt-kcal').textContent = t.kcal;
     if ($('tgt-protein')) $('tgt-protein').textContent = t.protein;
     if ($('tgt-water')) $('tgt-water').textContent = (t.water / 1000).toFixed(1);
+    if ($('water-target')) $('water-target').textContent = t.water;
     if ($('diet-kcal')) $('diet-kcal').textContent = t.kcal;
     if ($('diet-protein')) $('diet-protein').textContent = t.protein;
     if ($('diet-fat')) $('diet-fat').textContent = t.fat;
@@ -88,10 +89,28 @@
 
   // ---------- 今日训练 ----------
   function renderTrain() {
-    const t = TRAIN[new Date().getDay()] || REST;
-    $('tt-day').textContent = t.day === '休息' ? '休' : t.day.slice(1);
+    const dow = new Date().getDay();
+    const t = TRAIN[dow] || REST;
+    const isRest = !TRAIN[dow];
+    $('tt-day').textContent = isRest ? '休' : t.day.slice(1);
     $('tt-name').textContent = t.name;
     $('tt-sub').textContent = `${t.day} · ${t.sub}`;
+
+    const workoutItem = document.querySelector('#checklist [data-key="workout"]');
+    if (workoutItem) workoutItem.style.display = isRest ? 'none' : '';
+    if (!isRest && $('cl-workout-label')) {
+      $('cl-workout-label').textContent = '完成今日训练 · ' + t.name;
+      $('cl-workout-sub').textContent = t.day + ' · ' + t.sub;
+    }
+    if ($('cl-cardio-label')) {
+      if (isRest) {
+        $('cl-cardio-label').textContent = '快走 / 低强度有氧 30–45 分钟';
+        $('cl-cardio-sub').textContent = '休息日别完全不动，保持活跃';
+      } else {
+        $('cl-cardio-label').textContent = '训练后 20–30 分钟有氧';
+        $('cl-cardio-sub').textContent = '快走 / 坡度走，心率 120–140';
+      }
+    }
   }
 
   // ---------- 每日清单 ----------
