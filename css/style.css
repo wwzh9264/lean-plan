@@ -304,3 +304,60 @@ main {
   .view.active { animation: none; }
   * { transition: none !important; }
 }
+
+/* ============ 饮食记录 ============ */
+.intake-bar { height: 8px; background: rgba(240,168,63,.16); border-radius: 4px; overflow: hidden; margin: 12px 0 10px; }
+.intake-bar > i { display: block; height: 100%; background: var(--accent); border-radius: 4px; transition: width .3s ease; }
+.intake-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.intake-cell { background: var(--card-2); border-radius: 10px; padding: 10px 8px; text-align: center; }
+.intake-cell .v { font-size: var(--text-md); font-weight: 600; }
+.intake-cell .v.over { color: var(--bad); }
+.intake-cell .k { font-size: 10.5px; color: var(--ink-dim); margin-top: 2px; }
+.btn.block { width: 100%; padding: 12px; font-size: var(--text-base); }
+
+/* 食物记录列表 */
+.food-log { margin-bottom: 12px; }
+.food-empty { text-align: center; color: var(--ink-faint); font-size: var(--text-sm); padding: 16px 8px; }
+.meal-group { margin-bottom: 10px; }
+.meal-group .mg-head { display: flex; align-items: center; gap: 8px; margin: 6px 0 2px; }
+.meal-group .mg-head .tag { font-size: 10px; font-family: var(--font-mono); color: var(--linework); background: rgba(95,184,217,.12); padding: 1px 7px; border-radius: 6px; }
+.meal-group .mg-head .sub { margin-left: auto; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.fl-item { display: flex; align-items: center; gap: 9px; padding: 8px 0; border-bottom: 1px solid rgba(36,55,78,.5); }
+.fl-item:last-child { border-bottom: none; }
+.fl-item .fl-name { flex: 1; min-width: 0; font-size: var(--text-sm); }
+.fl-item .fl-name small { display: block; color: var(--ink-faint); font-size: var(--text-xs); }
+.fl-item .fl-qty { display: flex; align-items: center; gap: 7px; }
+.fl-item .fl-qty button { width: 24px; height: 24px; border-radius: 6px; border: 1px solid var(--line); background: var(--card-2); color: var(--ink); font-size: 15px; line-height: 1; cursor: pointer; }
+.fl-item .fl-qty .q { font-family: var(--font-mono); font-size: var(--text-sm); min-width: 14px; text-align: center; font-variant-numeric: tabular-nums; }
+.fl-item .fl-kcal { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--ink-dim); min-width: 46px; text-align: right; font-variant-numeric: tabular-nums; }
+.fl-item .fl-del { color: var(--ink-faint); background: none; border: none; font-size: 16px; cursor: pointer; padding: 4px; line-height: 1; }
+
+/* 食物选择弹层 */
+.modal { position: fixed; inset: 0; z-index: 60; display: flex; align-items: flex-end; justify-content: center; }
+.modal[hidden] { display: none; }
+.modal-backdrop { position: absolute; inset: 0; background: rgba(4,8,14,.72); }
+.modal-sheet { position: relative; width: 100%; max-width: 520px; max-height: 84dvh; background: #0e1a2b; border: 1px solid var(--line); border-bottom: none; border-radius: 18px 18px 0 0; padding: 16px 16px calc(12px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; overflow: hidden; }
+.modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.modal-head .t { font-weight: 600; font-size: var(--text-base); }
+.modal-close { background: none; border: none; color: var(--ink-dim); font-size: 24px; cursor: pointer; line-height: 1; padding: 2px 6px; }
+.meal-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+.meal-tabs button { flex: 1; padding: 8px 0; border-radius: 9px; border: 1px solid var(--line); background: var(--card); color: var(--ink-dim); font-size: var(--text-sm); cursor: pointer; }
+.meal-tabs button.active { background: rgba(240,168,63,.14); color: var(--accent); border-color: var(--accent); }
+.fp-search { width: 100%; background: var(--card-2); border: 1px solid var(--line); border-radius: 10px; color: var(--ink); padding: 10px 12px; font-size: var(--text-sm); margin-bottom: 10px; font-family: var(--font-sans); }
+.fp-search:focus { outline: none; border-color: var(--linework); }
+.cat-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.cat-chips button { padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--ink-dim); font-size: 12px; cursor: pointer; }
+.cat-chips button.active { background: var(--linework); color: #0b1420; border-color: var(--linework); }
+.food-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; margin: 0 -2px; }
+.food-item { display: flex; align-items: center; gap: 9px; width: 100%; padding: 11px 6px; border: none; border-bottom: 1px solid rgba(36,55,78,.5); background: none; color: var(--ink); text-align: left; cursor: pointer; font-family: var(--font-sans); }
+.food-item .f-name { flex: 1; min-width: 0; font-size: var(--text-sm); }
+.food-item .f-name small { display: block; color: var(--ink-faint); font-size: 11px; }
+.food-item .f-p { font-family: var(--font-mono); font-size: 11px; color: var(--linework); white-space: nowrap; }
+.food-item .f-kcal { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--ink-dim); min-width: 44px; text-align: right; font-variant-numeric: tabular-nums; }
+.food-item.warn .f-name { color: var(--bad); }
+.food-item .f-warn { font-size: 10px; color: var(--bad); border: 1px solid var(--bad); border-radius: 5px; padding: 0 4px; white-space: nowrap; }
+.fp-empty { text-align: center; color: var(--ink-faint); font-size: var(--text-sm); padding: 20px 8px; }
+
+/* 轻提示 */
+.toast { position: fixed; left: 50%; bottom: 92px; transform: translateX(-50%); background: var(--accent); color: #1a1205; padding: 8px 16px; border-radius: 999px; font-size: var(--text-sm); font-weight: 600; z-index: 90; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.toast.show { opacity: 1; }
