@@ -6,6 +6,8 @@
   const START = 75.0;          // 起始体重 kg（150 斤）
   const TARGET = 66.0;         // 目标体重 kg
   const BMI_DIV = (HEIGHT / 100) * (HEIGHT / 100); // 2.9929
+  const AGE = 22;              // 年龄（用于 BMR 估算，可按实际改）
+  const ACTIVITY = 1.4;        // 活动系数：一周四练 + 白天久坐
 
   const WD = ['日', '一', '二', '三', '四', '五', '六'];
   const TRAIN = {
@@ -49,6 +51,39 @@
     $('hero-diff').textContent = diff.toFixed(1);
     $('hero-fill').style.width = pct + '%';
     $('hero-cap-l').textContent = `起点 ${START.toFixed(1)}`;
+  }
+
+  // ---------- 动态目标（随体重调整） ----------
+  function computeTargets(w) {
+    const bmr = 10 * w + 6.25 * HEIGHT - 5 * AGE + 5; // Mifflin-St Jeor（男）
+    const tdee = bmr * ACTIVITY;
+    let deficit, phase;
+    if (w >= 72) { deficit = 500; phase = '减脂期 · 缺口 500 kcal'; }
+    else if (w >= 70) { deficit = 400; phase = '减脂期 · 缺口 400 kcal'; }
+    else if (w >= 68) { deficit = 300; phase = '放缓期 · 缺口 300 kcal'; }
+    else { deficit = 200; phase = '接近目标 · 缺口 200 kcal，重点保肌肉'; }
+    const kcal = Math.round((tdee - deficit) / 10) * 10;
+    const protein = Math.round(1.8 * w);
+    const fat = Math.round(0.8 * w);
+    const carbs = Math.max(0, Math.round((kcal - protein * 4 - fat * 9) / 4));
+    const water = Math.round(w * 33); // ml
+    return { bmr: Math.round(bmr), tdee: Math.round(tdee), deficit, phase, kcal, protein, fat, carbs, water };
+  }
+
+  function currentTargets() {
+    return computeTargets(latestWeight() ?? START);
+  }
+
+  function renderTargets() {
+    const t = currentTargets();
+    if ($('tgt-kcal')) $('tgt-kcal').textContent = t.kcal;
+    if ($('tgt-protein')) $('tgt-protein').textContent = t.protein;
+    if ($('tgt-water')) $('tgt-water').textContent = (t.water / 1000).toFixed(1);
+    if ($('diet-kcal')) $('diet-kcal').textContent = t.kcal;
+    if ($('diet-protein')) $('diet-protein').textContent = t.protein;
+    if ($('diet-fat')) $('diet-fat').textContent = t.fat;
+    if ($('diet-carb')) $('diet-carb').textContent = t.carbs;
+    if ($('diet-note')) $('diet-note').textContent = `当前体重 ${(latestWeight() ?? START).toFixed(1)}kg · TDEE 约 ${t.tdee} kcal · ${t.phase} · 蛋白质 ${t.protein}g / 脂肪 ${t.fat}g / 碳水 ${t.carbs}g（均为估算）`;
   }
 
   // ---------- 今日训练 ----------
@@ -127,7 +162,7 @@
       if (i >= 0) list[i].w = w; else list.push({ d, w });
       store.set('lean.weights', list);
       input.value = '';
-      renderHero(); renderStats(); renderChart();
+      renderHero(); renderTargets(); renderIntake(); renderStats(); renderChart();
     }
 
     renderStats(); renderChart();
@@ -236,6 +271,144 @@
     svg.addEventListener('pointerleave', onLeave);
   }
 
+  // ---------- 饮食记录 ----------
+  const MEALS = [['早', '早餐'], ['午', '午餐'], ['晚', '晚餐'], ['加', '加餐']];
+  const getFoodLog = () => store.get('lean.foodlog', {})[todayStr()] || [];
+  const setFoodLog = (list) => {
+    const all = store.get('lean.foodlog', {});
+    all[todayStr()] = list;
+    store.set('lean.foodlog', all);
+  };
+  let pickerMeal = '早', pickerCat = '全部';
+
+  function toast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._tm);
+    t._tm = setTimeout(() => t.classList.remove('show'), 1200);
+  }
+
+  function renderIntake() {
+    const t = currentTargets();
+    const list = getFoodLog();
+    const kcal = Math.round(list.reduce((s, x) => s + x.kcal * x.qty, 0));
+    const protein = Math.round(list.reduce((s, x) => s + x.protein * x.qty, 0));
+    const left = t.kcal - kcal;
+    const deficit = t.tdee - kcal;
+    $('intake-kcal').textContent = kcal;
+    $('intake-target').textContent = t.kcal;
+    $('intake-fill').style.width = Math.min(100, (kcal / t.kcal) * 100) + '%';
+    $('intake-protein').textContent = protein + 'g';
+    $('intake-protein').classList.toggle('over', protein > t.protein + 30);
+    $('intake-left').textContent = left;
+    $('intake-left').classList.toggle('over', left < 0);
+    $('intake-deficit').textContent = deficit;
+    $('intake-deficit').classList.toggle('over', deficit <= 0);
+  }
+
+  function renderFoodLog() {
+    const list = getFoodLog();
+    const wrap = $('food-log');
+    if (!list.length) {
+      wrap.innerHTML = '<div class="food-empty">还没记录，点下方「添加食物」</div>';
+      return;
+    }
+    let html = '';
+    MEALS.forEach(([key, label]) => {
+      const items = list.filter((x) => x.meal === key);
+      if (!items.length) return;
+      const sub = Math.round(items.reduce((s, x) => s + x.kcal * x.qty, 0));
+      html += '<div class="meal-group"><div class="mg-head"><span class="tag">' + label + '</span><span class="sub">' + sub + ' kcal</span></div>';
+      items.forEach((x) => {
+        const idx = list.indexOf(x);
+        html += '<div class="fl-item">'
+          + '<div class="fl-name">' + x.name + '<small>' + x.unit + '</small></div>'
+          + '<div class="fl-qty"><button data-dec="' + idx + '" aria-label="减">−</button><span class="q">' + x.qty + '</span><button data-inc="' + idx + '" aria-label="加">＋</button></div>'
+          + '<div class="fl-kcal">' + Math.round(x.kcal * x.qty) + '</div>'
+          + '<button class="fl-del" data-del="' + idx + '" aria-label="删除">×</button>'
+          + '</div>';
+      });
+      html += '</div>';
+    });
+    wrap.innerHTML = html;
+    wrap.querySelectorAll('[data-inc]').forEach((b) => b.addEventListener('click', () => changeQty(Number(b.dataset.inc), 1)));
+    wrap.querySelectorAll('[data-dec]').forEach((b) => b.addEventListener('click', () => changeQty(Number(b.dataset.dec), -1)));
+    wrap.querySelectorAll('[data-del]').forEach((b) => b.addEventListener('click', () => removeFood(Number(b.dataset.del))));
+  }
+
+  function changeQty(idx, d) {
+    const list = getFoodLog();
+    if (!list[idx]) return;
+    list[idx].qty += d;
+    if (list[idx].qty <= 0) list.splice(idx, 1);
+    setFoodLog(list);
+    renderFoodLog(); renderIntake();
+  }
+  function removeFood(idx) {
+    const list = getFoodLog();
+    list.splice(idx, 1);
+    setFoodLog(list);
+    renderFoodLog(); renderIntake();
+  }
+  function addFood(food) {
+    const list = getFoodLog();
+    const exist = list.find((x) => x.name === food.name && x.meal === pickerMeal);
+    if (exist) exist.qty += 1;
+    else list.push({ name: food.name, unit: food.unit, kcal: food.kcal, protein: food.protein, qty: 1, meal: pickerMeal });
+    setFoodLog(list);
+    renderFoodLog(); renderIntake();
+    toast('已加 ' + food.name);
+  }
+
+  function renderPicker() {
+    const q = ($('fp-search').value || '').trim().toLowerCase();
+    const list = (window.FOODS || []).filter((f) => {
+      if (pickerCat !== '全部' && f.cat !== pickerCat) return false;
+      if (q && f.name.toLowerCase().indexOf(q) === -1) return false;
+      return true;
+    });
+    const el = $('food-list');
+    if (!list.length) { el.innerHTML = '<div class="fp-empty">没有匹配的食物</div>'; return; }
+    el.innerHTML = list.map((f) =>
+      '<button class="food-item' + (f.warn ? ' warn' : '') + '" data-name="' + f.name + '">'
+      + '<span class="f-name">' + f.name + (f.warn ? ' <span class="f-warn">少碰</span>' : '') + '<small>' + f.unit + '</small></span>'
+      + '<span class="f-p">蛋白' + f.protein + 'g</span>'
+      + '<span class="f-kcal">' + f.kcal + '</span>'
+      + '</button>'
+    ).join('');
+    el.querySelectorAll('.food-item').forEach((b) => b.addEventListener('click', () => {
+      const f = (window.FOODS || []).find((x) => x.name === b.dataset.name);
+      if (f) addFood(f);
+    }));
+  }
+
+  function openPicker() { $('food-picker').hidden = false; renderPicker(); }
+  function closePicker() { $('food-picker').hidden = true; }
+
+  function initFoodLog() {
+    renderIntake();
+    renderFoodLog();
+    $('open-picker').addEventListener('click', openPicker);
+    document.querySelectorAll('#food-picker [data-close]').forEach((b) => b.addEventListener('click', closePicker));
+    document.querySelectorAll('#meal-tabs button').forEach((b) => b.addEventListener('click', () => {
+      document.querySelectorAll('#meal-tabs button').forEach((x) => x.classList.remove('active'));
+      b.classList.add('active');
+      pickerMeal = b.dataset.meal;
+    }));
+    document.querySelectorAll('#cat-chips button').forEach((b) => b.addEventListener('click', () => {
+      document.querySelectorAll('#cat-chips button').forEach((x) => x.classList.remove('active'));
+      b.classList.add('active');
+      pickerCat = b.dataset.cat;
+      renderPicker();
+    }));
+    $('fp-search').addEventListener('input', renderPicker);
+    const h = new Date().getHours();
+    pickerMeal = h < 10.5 ? '早' : h < 15 ? '午' : h < 20.5 ? '晚' : '加';
+    const def = document.querySelector('#meal-tabs button[data-meal="' + pickerMeal + '"]');
+    if (def) { document.querySelectorAll('#meal-tabs button').forEach((x) => x.classList.remove('active')); def.classList.add('active'); }
+  }
+
   // ---------- 离线缓存（Service Worker） ----------
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
@@ -248,10 +421,12 @@
     renderDate();
     renderHero();
     renderTrain();
+    renderTargets();
     initChecklist();
     initWater();
     initTabs();
     initProgress();
+    initFoodLog();
     let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(renderChart, 180); });
   }
   init();
