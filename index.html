@@ -71,9 +71,9 @@
       </div>
 
       <div class="targets">
-        <div class="target"><div class="v"><span class="num">1900</span><span class="u">kcal</span></div><div class="k">每日摄入</div></div>
-        <div class="target"><div class="v"><span class="num">140</span><span class="u">g</span></div><div class="k">蛋白质</div></div>
-        <div class="target"><div class="v"><span class="num">2.5</span><span class="u">L</span></div><div class="k">饮水</div></div>
+        <div class="target"><div class="v"><span class="num" id="tgt-kcal">—</span><span class="u">kcal</span></div><div class="k">每日摄入</div></div>
+        <div class="target"><div class="v"><span class="num" id="tgt-protein">—</span><span class="u">g</span></div><div class="k">蛋白质</div></div>
+        <div class="target"><div class="v"><span class="num" id="tgt-water">—</span><span class="u">L</span></div><div class="k">饮水</div></div>
         <div class="target"><div class="v"><span class="num">8000</span><span class="u">步</span></div><div class="k">步数</div></div>
       </div>
 
@@ -90,7 +90,7 @@
           </div>
           <div class="check-item" data-key="skincare">
             <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
-            <div class="label">早晚护肤<small>洁面 + 保湿</small></div>
+            <div class="label">早晚护肤<small>早面霜+防晒 · 晚A醇</small></div>
           </div>
           <div class="check-item" data-key="steps">
             <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
@@ -123,15 +123,35 @@
     <!-- ============ 饮食 ============ -->
     <section class="view" id="view-diet">
 
+      <!-- 今日摄入（记录 + 自动算缺口） -->
       <div class="card">
-        <div class="card-title"><span class="dot"></span>每日热量目标</div>
-        <div class="cal-num"><span class="num">1900</span><span class="unit">kcal / 天（减脂缺口约 500）</span></div>
-        <div class="macro">
-          <div class="m"><div class="v"><span class="num">140</span><span>g</span></div><div class="k">蛋白质 1.8g/kg</div></div>
-          <div class="m"><div class="v"><span class="num">60</span><span>g</span></div><div class="k">脂肪</div></div>
-          <div class="m"><div class="v"><span class="num">200</span><span>g</span></div><div class="k">碳水</div></div>
+        <div class="card-title"><span class="dot"></span>今日摄入</div>
+        <div class="cal-num"><span class="num" id="intake-kcal">0</span><span class="unit"> / <span id="intake-target">—</span> kcal</span></div>
+        <div class="intake-bar"><i id="intake-fill" style="width:0%"></i></div>
+        <div class="intake-grid">
+          <div class="intake-cell"><div class="v" id="intake-protein">0g</div><div class="k">蛋白质</div></div>
+          <div class="intake-cell"><div class="v" id="intake-left">—</div><div class="k">还能吃 kcal</div></div>
+          <div class="intake-cell"><div class="v" id="intake-deficit">—</div><div class="k">热量缺口 kcal</div></div>
         </div>
-        <p class="note">按 173cm / 75kg / 一周四练、白天久坐估算。蛋白质优先吃到 130–150g，保住肌肉；热量别低于 1700，否则容易掉肌肉、暴食反弹。</p>
+      </div>
+
+      <!-- 记录今天吃了什么 -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>今天吃了什么</div>
+        <div id="food-log" class="food-log"><div class="food-empty">还没记录，点下方「添加食物」</div></div>
+        <button class="btn block" id="open-picker">＋ 添加食物</button>
+      </div>
+
+      <!-- 每日目标（随体重动态调整） -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>今日目标 · 随体重自动调整</div>
+        <div class="cal-num"><span class="num" id="diet-kcal">—</span><span class="unit">kcal / 天</span></div>
+        <div class="macro">
+          <div class="m"><div class="v"><span class="num" id="diet-protein">—</span><span>g</span></div><div class="k">蛋白质</div></div>
+          <div class="m"><div class="v"><span class="num" id="diet-fat">—</span><span>g</span></div><div class="k">脂肪</div></div>
+          <div class="m"><div class="v"><span class="num" id="diet-carb">—</span><span>g</span></div><div class="k">碳水</div></div>
+        </div>
+        <p class="note" id="diet-note">—</p>
       </div>
 
       <div class="section">食堂红绿灯</div>
@@ -262,11 +282,12 @@
     <section class="view" id="view-skin">
 
       <div class="card">
-        <div class="card-title"><span class="dot"></span>护肤流程（男生极简版）</div>
-        <div class="step"><span class="clock">早</span><p>温和洁面 → 爽肤水（可选）→ 保湿乳 → 防晒（必涂）</p></div>
-        <div class="step"><span class="clock">晚</span><p>洁面（洗掉防晒和汗）→ 保湿</p></div>
+        <div class="card-title"><span class="dot"></span>我的护肤流程</div>
+        <div class="step"><span class="clock">早</span><p>洁面 → 面霜 → 防晒（必涂）</p></div>
+        <div class="step"><span class="clock">晚</span><p>洁面 → A 醇（建立耐受后再每天用）</p></div>
+        <div class="step"><span class="clock">偶尔</span><p>面膜（一周 2–3 次）</p></div>
+        <div class="step"><span class="clock">A醇注意</span><p>只在晚上用，白天务必防晒；从每周 2–3 次开始建立耐受，用完做好保湿，别和酸类 / 高浓度 VC 叠用</p></div>
         <div class="step"><span class="clock">运动后</span><p>及时洗脸 / 洗澡，别让汗和油闷着</p></div>
-        <div class="step"><span class="clock">长痘</span><p>别挤、少糖少奶、勤换枕套、规律作息；反复不好去看皮肤科，别信偏方</p></div>
       </div>
 
       <div class="section">脸部轮廓 · 下颌线</div>
@@ -361,6 +382,38 @@
     </button>
   </nav>
 
+  <!-- 食物选择弹层 -->
+  <div class="modal" id="food-picker" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-sheet" role="dialog" aria-label="添加食物">
+      <div class="modal-head">
+        <span class="t">添加食物</span>
+        <button class="modal-close" data-close aria-label="关闭">×</button>
+      </div>
+      <div class="meal-tabs" id="meal-tabs">
+        <button data-meal="早" class="active">早餐</button>
+        <button data-meal="午">午餐</button>
+        <button data-meal="晚">晚餐</button>
+        <button data-meal="加">加餐</button>
+      </div>
+      <input class="fp-search" id="fp-search" type="search" placeholder="搜索食物，如「鸡胸」「米饭」" aria-label="搜索食物">
+      <div class="cat-chips" id="cat-chips">
+        <button data-cat="全部" class="active">全部</button>
+        <button data-cat="主食">主食</button>
+        <button data-cat="蛋白">蛋白</button>
+        <button data-cat="蔬菜">蔬菜</button>
+        <button data-cat="水果">水果</button>
+        <button data-cat="饮品">饮品</button>
+        <button data-cat="零食">零食</button>
+        <button data-cat="红灯">红灯</button>
+      </div>
+      <div class="food-list" id="food-list"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/foods.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
