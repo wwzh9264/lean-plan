@@ -6,7 +6,7 @@
   const START = 75.0;          // 起始体重 kg（150 斤）
   const TARGET = 66.0;         // 目标体重 kg
   const BMI_DIV = (HEIGHT / 100) * (HEIGHT / 100); // 2.9929
-  const AGE = 22;              // 年龄（用于 BMR 估算，可按实际改）
+  const AGE = 25.5;            // 年龄（用户实际 25 岁半）
   const ACTIVITY = 1.4;        // 活动系数：一周四练 + 白天久坐
 
   const WD = ['日', '一', '二', '三', '四', '五', '六'];
