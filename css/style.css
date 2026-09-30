@@ -193,6 +193,8 @@ main {
 .check-item .label { flex: 1; font-size: var(--text-base); }
 .check-item .label small { display: block; color: var(--ink-faint); font-size: var(--text-xs); margin-top: 1px; }
 .check-item.done .label { color: var(--ink-faint); text-decoration: line-through; }
+.cl-group { margin: 14px 0 2px; font-size: 11px; letter-spacing: 0.06em; color: var(--linework); font-weight: 600; }
+.cl-group:first-child { margin-top: 2px; }
 
 /* 喝水计数 */
 .water { text-align: center; }
