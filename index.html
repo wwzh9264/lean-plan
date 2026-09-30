@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>薄肌计划</title>
+  <meta name="description" content="个人减脂 · 薄肌 · 皮肤 · 脸部轮廓计划">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b1420">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+
+  <!-- iOS 添加到主屏幕 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="薄肌计划">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.2"></circle><circle cx="12" cy="12" r="0.6" fill="currentColor"></circle>
+        </svg>
+      </span>
+      薄肌计划
+    </div>
+    <div class="date" id="today-date">—</div>
+  </header>
+
+  <main>
+
+    <!-- ============ 今日 ============ -->
+    <section class="view active" id="view-today">
+
+      <div class="hero">
+        <svg class="contour" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <g fill="none" stroke="#5fb8d9">
+            <ellipse cx="200" cy="80" rx="185" ry="66" stroke-opacity=".34"></ellipse>
+            <ellipse cx="200" cy="80" rx="150" ry="53" stroke-opacity=".44" transform="rotate(-7 200 80)"></ellipse>
+            <ellipse cx="200" cy="80" rx="112" ry="40" stroke-opacity=".54" transform="rotate(6 200 80)"></ellipse>
+            <ellipse cx="200" cy="80" rx="74" ry="27" stroke-opacity=".62" transform="rotate(-11 200 80)"></ellipse>
+            <ellipse cx="200" cy="80" rx="38" ry="14" stroke-opacity=".7" transform="rotate(9 200 80)"></ellipse>
+          </g>
+        </svg>
+        <div class="hero-body">
+          <div class="hero-eyebrow">我的减脂 · 薄肌计划</div>
+          <div class="hero-weight">
+            <span class="num" id="hero-weight">—</span>
+            <span class="unit">kg</span>
+          </div>
+          <div class="hero-sub">BMI <b id="hero-bmi">—</b> · 目标 <b>66.0</b> · 还差 <b id="hero-diff">—</b> kg</div>
+          <div class="hero-progress">
+            <div class="bar"><i id="hero-fill" style="width:0%"></i></div>
+            <div class="cap"><span id="hero-cap-l">起点 75.0</span><span id="hero-cap-r">目标 66.0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="today-train" id="today-train">
+        <div class="day" id="tt-day">—</div>
+        <div>
+          <div class="t1" id="tt-name">今日训练</div>
+          <div class="t2" id="tt-sub">—</div>
+        </div>
+      </div>
+
+      <div class="targets">
+        <div class="target"><div class="v"><span class="num">1900</span><span class="u">kcal</span></div><div class="k">每日摄入</div></div>
+        <div class="target"><div class="v"><span class="num">140</span><span class="u">g</span></div><div class="k">蛋白质</div></div>
+        <div class="target"><div class="v"><span class="num">2.5</span><span class="u">L</span></div><div class="k">饮水</div></div>
+        <div class="target"><div class="v"><span class="num">8000</span><span class="u">步</span></div><div class="k">步数</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>今日清单</div>
+        <div id="checklist">
+          <div class="check-item" data-key="sleep">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label">睡够 7 小时<small>22:30–23:00 睡，别熬夜</small></div>
+          </div>
+          <div class="check-item" data-key="sun">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label">涂防晒<small>出门前，阴天也涂</small></div>
+          </div>
+          <div class="check-item" data-key="skincare">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label">早晚护肤<small>洁面 + 保湿</small></div>
+          </div>
+          <div class="check-item" data-key="steps">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label">步数达标<small>8000 步以上</small></div>
+          </div>
+          <div class="check-item" data-key="protein">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label">蛋白质达标<small>三餐都有手掌大的蛋白</small></div>
+          </div>
+          <div class="check-item" data-key="fast">
+            <button class="box" aria-label="标记完成" aria-pressed="false"><svg viewBox="0 0 24 24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6"></path></svg></button>
+            <div class="label">睡前 3 小时不吃东西<small>控盐控糖，防水肿</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card water">
+        <div class="card-title" style="justify-content:center"><span class="dot"></span>喝水打卡</div>
+        <div class="big"><span class="num" id="water-val">0</span><span class="unit">ml</span></div>
+        <div class="cap">目标 2500 ml</div>
+        <div class="btns">
+          <button data-add="250">+250</button>
+          <button data-add="500">+500</button>
+          <button class="reset" id="water-reset">清零</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============ 饮食 ============ -->
+    <section class="view" id="view-diet">
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>每日热量目标</div>
+        <div class="cal-num"><span class="num">1900</span><span class="unit">kcal / 天（减脂缺口约 500）</span></div>
+        <div class="macro">
+          <div class="m"><div class="v"><span class="num">140</span><span>g</span></div><div class="k">蛋白质 1.8g/kg</div></div>
+          <div class="m"><div class="v"><span class="num">60</span><span>g</span></div><div class="k">脂肪</div></div>
+          <div class="m"><div class="v"><span class="num">200</span><span>g</span></div><div class="k">碳水</div></div>
+        </div>
+        <p class="note">按 173cm / 75kg / 一周四练、白天久坐估算。蛋白质优先吃到 130–150g，保住肌肉；热量别低于 1700，否则容易掉肌肉、暴食反弹。</p>
+      </div>
+
+      <div class="section">食堂红绿灯</div>
+      <div class="lights">
+        <div class="light green">
+          <div class="hd"><span class="lamp"></span>绿灯 · 放心吃</div>
+          <p>蛋白：水煮蛋、茶叶蛋、鸡胸肉、清蒸鱼、水煮虾、瘦牛肉、卤牛肉（瘦）、豆腐豆干、无糖豆浆、纯牛奶、无糖酸奶。<br>蔬菜：西兰花、菠菜、青菜、黄瓜、番茄、芹菜等绿叶菜。<br>主食：糙米、玉米、红薯、燕麦、全麦面包。</p>
+        </div>
+        <div class="light yellow">
+          <div class="hd"><span class="lamp"></span>黄灯 · 适量吃</div>
+          <p>白米饭、面条、馒头、土豆、粉条、香蕉、较甜的水果、坚果——注意量，坚果一次一小把（约 10 颗）。</p>
+        </div>
+        <div class="light red">
+          <div class="hd"><span class="lamp"></span>红灯 · 少碰</div>
+          <p>油炸（炸鸡、油条、锅包肉）、糖醋/鱼香/宫保等重油芡汁菜、红烧肉与肥肉、奶茶和含糖饮料、蛋糕饼干、辣条、腊肠腊肉、猪蹄、油腻的菜汤。</p>
+        </div>
+      </div>
+
+      <div class="section">打菜口诀</div>
+      <div class="card">
+        <div class="tip"><span class="idx">1</span><p>一荤两素：一份清蒸 / 水煮 / 卤的肉 + 两份少油青菜</p></div>
+        <div class="tip"><span class="idx">2</span><p>主食减半：米饭、馒头减到一拳头，或换成玉米、红薯</p></div>
+        <div class="tip"><span class="idx">3</span><p>先吃蛋白和蔬菜，主食放最后<small>饱腹感先上来，自然少吃主食</small></p></div>
+        <div class="tip"><span class="idx">4</span><p>菜太油就过一遍水再吃<small>涮掉一层油，热量和盐都少很多</small></p></div>
+        <div class="tip"><span class="idx">5</span><p>汤少喝——油和盐都沉在汤里</p></div>
+        <div class="tip"><span class="idx">6</span><p>不喝含糖饮料，配白水或无糖茶</p></div>
+      </div>
+
+      <div class="section">三餐模板<span class="hint">合计约 1900 kcal / 蛋白约 140g</span></div>
+      <div class="meal card">
+        <div class="meal-hd"><span class="tag">≈450</span><span class="name">早餐</span></div>
+        <ul>
+          <li>水煮蛋 ×2 + 无糖豆浆或纯牛奶 250ml</li>
+          <li>燕麦 / 玉米 / 全麦面包（选一样）</li>
+          <li>一个苹果或半根黄瓜</li>
+        </ul>
+      </div>
+      <div class="meal card">
+        <div class="meal-hd"><span class="tag">≈700</span><span class="name">午餐</span></div>
+        <ul>
+          <li>米饭一拳头（减半）</li>
+          <li>清蒸鱼 / 鸡胸 / 瘦牛肉，约掌心 ×1.5</li>
+          <li>两份少油青菜</li>
+        </ul>
+      </div>
+      <div class="meal card">
+        <div class="meal-hd"><span class="tag">≈550</span><span class="name">晚餐</span></div>
+        <ul>
+          <li>蛋白质为主：鸡胸 / 鱼 / 豆腐</li>
+          <li>大量蔬菜</li>
+          <li>半拳头主食，或红薯、玉米</li>
+        </ul>
+      </div>
+      <div class="meal card">
+        <div class="meal-hd"><span class="tag">≈200</span><span class="name">加餐</span></div>
+        <ul>
+          <li>无糖酸奶 / 牛奶一杯，或蛋白粉一勺，或水果 + 10 颗坚果</li>
+          <li>训练日：练前 1.5 小时吃根香蕉或全麦面包，练后补蛋白 + 碳水</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- ============ 训练 ============ -->
+    <section class="view" id="view-training">
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>一周安排</div>
+        <div class="stat-row"><span class="k">训练</span><span class="v">周一 胸 · 周二 肩 · 周四 背 · 周五 腿</span></div>
+        <div class="stat-row"><span class="k">恢复</span><span class="v">周三 / 周六 / 周日 休息 + 有氧 / 步行</span></div>
+        <p class="note">每次 1–2 小时足够，重点在动作质量，别拖沓。</p>
+      </div>
+
+      <div class="section">训练计划<span class="hint">次数 8–15，中等重量</span></div>
+
+      <div class="card day-card">
+        <div class="day-hd"><span class="day-chip">周一</span><span class="day-name">胸</span><span class="day-focus">上胸 · 厚度</span></div>
+        <div class="ex"><span class="ex-name">平板杠铃卧推</span><span class="ex-spec">4 × 8–10</span></div>
+        <div class="ex"><span class="ex-name">上斜哑铃卧推</span><span class="ex-spec">4 × 10–12</span></div>
+        <div class="ex"><span class="ex-name">双杠臂屈伸</span><span class="ex-spec">3 × 10–12</span></div>
+        <div class="ex"><span class="ex-name">绳索夹胸</span><span class="ex-spec">3 × 12–15</span></div>
+      </div>
+
+      <div class="card day-card">
+        <div class="day-hd"><span class="day-chip">周二</span><span class="day-name">肩</span><span class="day-focus">宽肩 · 中后束</span></div>
+        <div class="ex"><span class="ex-name">站姿杠铃推举</span><span class="ex-spec">4 × 8–10</span></div>
+        <div class="ex"><span class="ex-name">哑铃侧平举</span><span class="ex-spec">4 × 12–15</span></div>
+        <div class="ex"><span class="ex-name">俯身反向飞鸟</span><span class="ex-spec">4 × 12–15</span></div>
+        <div class="ex"><span class="ex-name">绳索面拉</span><span class="ex-spec">3 × 15</span></div>
+      </div>
+
+      <div class="card day-card">
+        <div class="day-hd"><span class="day-chip">周四</span><span class="day-name">背</span><span class="day-focus">宽度 · 倒三角</span></div>
+        <div class="ex"><span class="ex-name">引体向上（或高位下拉）</span><span class="ex-spec">4 × 8–12</span></div>
+        <div class="ex"><span class="ex-name">杠铃划船</span><span class="ex-spec">4 × 8–10</span></div>
+        <div class="ex"><span class="ex-name">坐姿绳索划船</span><span class="ex-spec">3 × 10–12</span></div>
+        <div class="ex"><span class="ex-name">直臂下压</span><span class="ex-spec">3 × 12–15</span></div>
+      </div>
+
+      <div class="card day-card">
+        <div class="day-hd"><span class="day-chip">周五</span><span class="day-name">腿</span><span class="day-focus">力量 · 代谢</span></div>
+        <div class="ex"><span class="ex-name">深蹲</span><span class="ex-spec">4 × 8–10</span></div>
+        <div class="ex"><span class="ex-name">罗马尼亚硬拉</span><span class="ex-spec">3 × 8–10</span></div>
+        <div class="ex"><span class="ex-name">腿举（或箭步蹲）</span><span class="ex-spec">3 × 10–12</span></div>
+        <div class="ex"><span class="ex-name">坐姿腿弯举</span><span class="ex-spec">3 × 12–15</span></div>
+        <div class="ex"><span class="ex-name">提踵</span><span class="ex-spec">4 × 15–20</span></div>
+      </div>
+
+      <div class="section">薄肌要点</div>
+      <div class="card">
+        <div class="tip"><span class="idx">1</span><p>次数 8–15、中等重量，慢下快上（控制离心）</p></div>
+        <div class="tip"><span class="idx">2</span><p>渐进超负荷：每周在次数或重量上 + 一点点</p></div>
+        <div class="tip"><span class="idx">3</span><p>减脂期别降重量：保住力量 = 保住肌肉</p></div>
+        <div class="tip"><span class="idx">4</span><p>复合动作为主，组间休息 60–90 秒</p></div>
+        <div class="tip"><span class="idx">5</span><p>想要「薄」的身材：重点不是练小，是体脂够低 + 肌肉线条清晰</p></div>
+      </div>
+
+      <div class="section">有氧与步数</div>
+      <div class="card">
+        <div class="tip"><span class="idx">•</span><p>训练后 20–30 分钟快走 / 坡度走，心率约 120–140</p></div>
+        <div class="tip"><span class="idx">•</span><p>休息日 30–45 分钟低强度有氧</p></div>
+        <div class="tip"><span class="idx">•</span><p>日常步数 8000–10000——久坐党减脂的关键增量</p></div>
+      </div>
+
+    </section>
+
+    <!-- ============ 皮肤 ============ -->
+    <section class="view" id="view-skin">
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>护肤流程（男生极简版）</div>
+        <div class="step"><span class="clock">早</span><p>温和洁面 → 爽肤水（可选）→ 保湿乳 → 防晒（必涂）</p></div>
+        <div class="step"><span class="clock">晚</span><p>洁面（洗掉防晒和汗）→ 保湿</p></div>
+        <div class="step"><span class="clock">运动后</span><p>及时洗脸 / 洗澡，别让汗和油闷着</p></div>
+        <div class="step"><span class="clock">长痘</span><p>别挤、少糖少奶、勤换枕套、规律作息；反复不好去看皮肤科，别信偏方</p></div>
+      </div>
+
+      <div class="section">脸部轮廓 · 下颌线</div>
+      <div class="card rank">
+        <p class="note" style="margin:0 0 6px">按重要性排序。核心公式：低体脂 + 低水肿 + 好体态 + 紧致皮肤。</p>
+        <div class="tip"><span class="idx"></span><p>减脂到 13–15%<small>脸是最后瘦的，全身减脂脸自然收紧——别急，坚持就有效</small></p></div>
+        <div class="tip"><span class="idx"></span><p>控盐控钠<small>食堂偏咸，多喝水排钠；睡前别吃太咸，减少晨起水肿脸</small></p></div>
+        <div class="tip"><span class="idx"></span><p>睡够别熬夜<small>熬夜 = 水肿 + 皮肤差，下颌线直接模糊</small></p></div>
+        <div class="tip"><span class="idx"></span><p>体态挺直<small>颈前倾 / 圆肩会让双下巴明显——每天靠墙站（后脑、肩、臀、脚跟贴墙）、下巴微收</small></p></div>
+        <div class="tip"><span class="idx"></span><p>用鼻子呼吸<small>长期口呼吸会让下巴后缩、脸型变差</small></p></div>
+        <div class="tip"><span class="idx"></span><p>皮肤紧致<small>防晒 + 保湿 + 吃够蛋白质</small></p></div>
+      </div>
+
+      <div class="section">皮肤变好的关键</div>
+      <div class="card rank">
+        <div class="tip"><span class="idx"></span><p>防晒（每天，阴天也涂）<small>抗老、防痘印加深的第一位</small></p></div>
+        <div class="tip"><span class="idx"></span><p>睡够 7–8 小时<small>皮肤修复、气色</small></p></div>
+        <div class="tip"><span class="idx"></span><p>少糖（奶茶、甜点）<small>糖化让皮肤暗沉、爱长痘</small></p></div>
+        <div class="tip"><span class="idx"></span><p>喝水 2–3L<small>保湿、代谢</small></p></div>
+        <div class="tip"><span class="idx"></span><p>温和清洁 + 保湿<small>别过度清洁，破坏屏障反而更油更痘</small></p></div>
+      </div>
+
+      <div class="section">变帅清单（加分项）</div>
+      <div class="card">
+        <div class="tip"><span class="idx">•</span><p>发型：剪清爽、露出额头的短发</p></div>
+        <div class="tip"><span class="idx">•</span><p>眉毛：修掉杂毛，眉形干净</p></div>
+        <div class="tip"><span class="idx">•</span><p>皮肤：干净透亮最加分（护肤 + 防晒）</p></div>
+        <div class="tip"><span class="idx">•</span><p>穿搭：合身、干净、基础色</p></div>
+        <div class="tip"><span class="idx">•</span><p>体态：背挺直，气质直接提升</p></div>
+      </div>
+
+    </section>
+
+    <!-- ============ 进度 ============ -->
+    <section class="view" id="view-progress">
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>记录体重</div>
+        <div class="field">
+          <input type="number" id="weight-input" inputmode="decimal" placeholder="75.0" step="0.1" min="40" max="200" aria-label="当前体重（公斤）">
+          <button class="btn" id="weight-add">记录</button>
+        </div>
+        <p class="note">建议每天早起、空腹、上完厕所后称，同一时间记录。</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>体重趋势</div>
+        <div class="chart-wrap">
+          <div id="chart-empty" class="chart-empty">还没有记录，先称一次体重吧</div>
+          <svg id="weight-chart" role="img" aria-label="体重趋势折线图" style="display:none"></svg>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>身体数据</div>
+        <div class="stat-row"><span class="k">当前体重</span><span class="v"><span class="num" id="stat-weight">—</span> <small>kg</small></span></div>
+        <div class="stat-row"><span class="k">BMI</span><span class="v"><span class="num" id="stat-bmi">—</span></span></div>
+        <div class="stat-row"><span class="k">目标体重</span><span class="v"><span class="num">66.0</span> <small>kg</small></span></div>
+        <div class="stat-row"><span class="k">估算体脂</span><span class="v" id="stat-bf">约 22–25% <small>以体脂秤为准</small></span></div>
+        <div class="stat-row"><span class="k">最近趋势</span><span class="v" id="stat-trend">—</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>每周照片</div>
+        <p style="font-size:var(--text-sm);color:var(--ink-dim)">每周固定时间（如周日早上空腹）拍正面、侧面、背面三张，同一光线、同一角度。体重会骗人，照片不会——这是判断减脂进度最可靠的方式。</p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <nav class="tabbar" aria-label="主导航">
+    <button class="tab active" data-view="today" aria-current="page">
+      <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7.5"></circle><circle cx="12" cy="12" r="3.5"></circle><circle cx="12" cy="12" r="0.6" fill="currentColor" stroke="none"></circle></svg>
+      今日
+    </button>
+    <button class="tab" data-view="diet">
+      <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 11h15"></path><path d="M4.5 11a7.5 7.5 0 0 0 15 0z"></path></svg>
+      饮食
+    </button>
+    <button class="tab" data-view="training">
+      <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="9.5" y1="12" x2="14.5" y2="12"></line><rect x="2.6" y="7.6" width="3.4" height="8.8" rx="1"></rect><rect x="1.2" y="6.2" width="5.4" height="11.6" rx="1.6"></rect><rect x="18" y="7.6" width="3.4" height="8.8" rx="1"></rect><rect x="17.4" y="6.2" width="5.4" height="11.6" rx="1.6"></rect></svg>
+      训练
+    </button>
+    <button class="tab" data-view="skin">
+      <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 C 8.5 8 6 11 6 14.5 A 6 6 0 0 0 18 14.5 C 18 11 15.5 8 12 3.5 Z"></path></svg>
+      皮肤
+    </button>
+    <button class="tab" data-view="progress">
+      <svg viewBox="0 0 24 24" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5 L8.5 12 L13 15.5 L18 8.5 L21 10.5"></path><circle cx="18" cy="8.5" r="1.4" fill="currentColor" stroke="none"></circle></svg>
+      进度
+    </button>
+  </nav>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
